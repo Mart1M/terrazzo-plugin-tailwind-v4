@@ -1,0 +1,200 @@
+{
+    "color": {
+      "text": {
+        "test": {
+          "$type": "color",
+          "$value": "rgb(210, 166, 166)",
+          "$description": "",
+          "$extensions": {
+            "mode": {
+              "Mode1": "rgb(210, 166, 166)",
+              "Mode2": "rgb(255, 255, 255)"
+            },
+            "scopes": [
+              "TEXT_FILL"
+            ]
+          }
+        }
+      },
+      "bg": {
+        "info": {
+          "selected": {
+            "$type": "color",
+            "$value": "rgb(210, 166, 166)",
+            "$description": "",
+            "$extensions": {
+              "mode": {
+                "Mode1": "rgb(210, 166, 166)",
+                "Mode2": "rgb(42, 51, 145)"
+              },
+              "scopes": [
+                "ALL_SCOPES"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "border-radius": {
+      "sm": {
+        "$type": "dimension",
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        },
+        "$description": "",
+        "$extensions": {
+          "mode": {
+            "Mode1": {
+              "value": 12,
+              "unit": "px"
+            },
+            "Mode2": {
+              "value": 12,
+              "unit": "px"
+            }
+          },
+          "scopes": [
+            "CORNER_RADIUS"
+          ]
+        }
+      }
+    },
+    "border": {
+      "brand": {
+        "default": {
+          "$type": "border",
+          "$value": {
+            "color": "rgb(255, 255, 255)",
+            "width": {
+              "value": 1,
+              "unit": "px"
+            },
+            "style": "solid",
+            "descriptions": {
+              "color": "test color",
+              "width": "test width"
+            }
+          },
+          "$extensions": {
+            "mode": {
+              "Mode1": {
+                "color": "rgb(255, 255, 255)",
+                "width": {
+                  "value": 1,
+                  "unit": "px"
+                },
+                "style": "solid"
+              },
+              "Mode2": {
+                "color": "rgb(255, 255, 255)",
+                "width": {
+                  "value": 1,
+                  "unit": "px"
+                },
+                "style": "solid"
+              }
+            },
+            "scopes": [
+              "STROKE_COLOR",
+              "EFFECT_COLOR",
+              "STROKE_FLOAT"
+            ]
+          }
+        }
+      }
+    },
+    "test-dimension": {
+      "$type": "dimension",
+      "$value": {
+        "value": 402,
+        "unit": "px"
+      },
+      "$description": "",
+      "$extensions": {
+        "mode": {
+          "Mode1": {
+            "value": 402,
+            "unit": "px"
+          },
+          "Mode2": {
+            "value": 32,
+            "unit": "px"
+          }
+        },
+        "scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "shadow": {
+      "sm": {
+        "$type": "shadow",
+        "$value": {
+          "offsetX": {
+            "value": 1,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 3,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 3,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 5,
+            "unit": "px"
+          },
+          "color": "rgba(60, 60, 60, 0.32)"
+        },
+        "$extensions": {
+          "mode": {
+            "Mode1": {
+              "offsetX": {
+                "value": 1,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 3,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 3,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 5,
+                "unit": "px"
+              },
+              "color": "rgba(60, 60, 60, 0.32)"
+            },
+            "Mode2": {
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 0,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "color": "rgb(255, 255, 255)"
+            }
+          },
+          "scopes": [
+            "EFFECT_COLOR",
+            "EFFECT_FLOAT"
+          ]
+        }
+      }
+    }
+  }

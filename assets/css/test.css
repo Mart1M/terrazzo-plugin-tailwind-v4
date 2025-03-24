@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-*: initial;
+  --shadow-*: initial;
+  --text-*: initial;
+  --spacing-*: initial;
+  --border-*: initial;
+  --typography-*: initial;
+  --radius-*: initial;
+
+  --color-border-brand: rgb(255, 255, 255);
+  --color-info-selected: rgb(210, 166, 166);
+  --color-text-test: rgb(210, 166, 166);
+  --radius-sm: 12px;
+  --shadow-sm: 1px 3px 3px 5px rgba(60, 60, 60, 0.32);
+  --test-dimension: 402px;
+}
+
+  [data-theme='mode1'] {
+    --color-border-brand: rgb(255, 255, 255);
+    --color-info-selected: rgb(210, 166, 166);
+    --color-text-test: rgb(210, 166, 166);
+    --radius-sm: 12px;
+    --shadow-sm: 0 0 0 0 rgb(0 0 0 / 0.05);
+    --test-dimension: 402px;
+  }
+
+  [data-theme='mode2'] {
+    --color-border-brand: rgb(255, 255, 255);
+    --color-info-selected: rgb(42, 51, 145);
+    --color-text-test: rgb(255, 255, 255);
+    --radius-sm: 12px;
+    --shadow-sm: 0 0 0 0 rgb(0 0 0 / 0.05);
+    --test-dimension: 32px;
+  }
