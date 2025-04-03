@@ -210,6 +210,10 @@ export default function pluginTailwindV4(options = {}) {
     }
 
     if (typeof value === "string") {
+      // If this is a font family value (check the token type in the transform context)
+      if (this?.token?.$type === 'fontFamily') {
+        return `"${value}"`;
+      }
       return value;
     }
 
@@ -350,6 +354,52 @@ export default function pluginTailwindV4(options = {}) {
     return modeToken;
   }
 
+  function generateGoogleFontsImport(tokens) {
+    const fontFamilies = new Set();
+
+    // Extract all font family tokens
+    for (const [id, token] of Object.entries(tokens)) {
+      // Check if it's a font family token
+      if (
+        token.$type === 'fontFamily' ||
+        (token.originalValue?.$extensions?.scopes || []).includes('FONT_FAMILY')
+      ) {
+        // Get the default font value
+        const defaultFont = token.$value || token.originalValue?.$value;
+        if (defaultFont && typeof defaultFont === 'string') {
+          fontFamilies.add(defaultFont.trim());
+        }
+
+        // Get fonts from modes if they exist
+        const modes = token.$extensions?.mode || token.originalValue?.$extensions?.mode;
+        if (modes) {
+          Object.values(modes).forEach(font => {
+            if (font && typeof font === 'string') {
+              fontFamilies.add(font.trim());
+            }
+          });
+        }
+      }
+    }
+
+    // Generate Google Fonts import URLs
+    if (fontFamilies.size > 0) {
+      console.log('Found font families:', Array.from(fontFamilies)); // Debug log
+      const fontQuery = Array.from(fontFamilies)
+        .map(font => {
+          // Replace spaces with + for URL
+          const formattedFont = font.replace(/\s+/g, '+');
+          // Add default weights and styles
+          return `family=${formattedFont}:ital,wght@0,200..1000;1,200..1000`;
+        })
+        .join('&');
+
+      return `@import url('https://fonts.googleapis.com/css2?${fontQuery}&display=swap');`;
+    }
+
+    return ''; // Return empty string if no fonts found
+  }
+
   return {
     name: "plugin-tailwind-v4",
     async transform({ tokens, setTransform }) {
@@ -360,9 +410,9 @@ export default function pluginTailwindV4(options = {}) {
           setTransform(id, {
             format: "tailwind-v4",
             path: id,
-            value: formatValue(defaultValue),
+            value: formatValue.call({ token }, defaultValue), // Pass token context
             mode: "default",
-            token, // Pass the token for scope access
+            token,
           });
         }
 
@@ -392,7 +442,7 @@ export default function pluginTailwindV4(options = {}) {
 
               const value = isReference
                 ? resolveTokenReference(modeValue)
-                : formatValue(modeValue);
+                : formatValue.call({ token }, modeValue);
 
               console.log("Formatted dimension value:", value);
 
@@ -408,7 +458,7 @@ export default function pluginTailwindV4(options = {}) {
 
             // Handle shadow values in modes
             if (token.$type === "shadow" && !isReference) {
-              const shadowValue = formatValue({
+              const shadowValue = formatValue.call({ token }, {
                 $type: "shadow",
                 $value: modeValue,
               });
@@ -424,7 +474,7 @@ export default function pluginTailwindV4(options = {}) {
 
             const value = isReference
               ? resolveTokenReference(modeValue)
-              : formatValue(modeValue);
+              : formatValue.call({ token }, modeValue);
 
             setTransform(id, {
               format: "tailwind-v4",
@@ -460,7 +510,7 @@ export default function pluginTailwindV4(options = {}) {
 
               // Handle shadow values in mode object
               if (token.$type === "shadow") {
-                const shadowValue = formatValue({
+                const shadowValue = formatValue.call({ token }, {
                   $type: "shadow",
                   $value: getModeValue(modeToken),
                 });
@@ -480,7 +530,7 @@ export default function pluginTailwindV4(options = {}) {
                 const value =
                   typeof modeValue === "number" || typeof modeValue === "string"
                     ? String(modeValue)
-                    : formatValue(modeValue);
+                    : formatValue.call({ token }, modeValue);
 
                 setTransform(id, {
                   format: "tailwind-v4",
@@ -494,7 +544,7 @@ export default function pluginTailwindV4(options = {}) {
 
               const modeValue = getModeValue(modeToken);
               if (modeValue) {
-                const value = formatValue(modeValue);
+                const value = formatValue.call({ token }, modeValue);
                 setTransform(id, {
                   format: "tailwind-v4",
                   path: id,
@@ -508,7 +558,7 @@ export default function pluginTailwindV4(options = {}) {
         }
       }
     },
-    async build({ getTransforms, outputFile }) {
+    async build({ tokens, getTransforms, outputFile }) {
       const modes = new Set();
       const defaultTheme = new Map();
       const modeThemes = new Map();
@@ -532,8 +582,13 @@ export default function pluginTailwindV4(options = {}) {
         }
       });
 
-      // Generate the CSS output
-      const output = [ "@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');",'@import "tailwindcss";', "", "@theme {"];
+      // Generate the CSS output with dynamic font imports
+      const output = [
+        generateGoogleFontsImport(tokens), // Pass tokens to the function
+        '@import "tailwindcss";',
+        "",
+        "@theme {"
+      ];
 
       // Add base resets
       const baseResets = [
